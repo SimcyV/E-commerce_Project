@@ -1,0 +1,40 @@
+<%- include('../partials/signedin_header') %>
+
+
+  
+
+  <!-- Login Register -->
+  <div class="container mx-auto row">
+    <div class="col-12 col-md-5 mx-auto p-5">
+        <div class="card p-4">
+          <br><br>
+        <h2 class="text-center">OTP VERIFICATION</h2>
+        <form action="/otpSignup" method="post">
+          
+
+            <label for="OTP" class="form-group">Email address</label>
+            <input type="number" name="otp" placeholder="Type OTP " class="form-control border-dark" required>
+            <p>Please enter the OTP above that recieved in your registered email</p>
+            <% if (messages.success) { %>
+                <div class="alert alert-success">
+                    <%= messages.success %>
+                </div>
+            <% }else if (messages.error){ %>
+              <div class="alert alert-danger">
+                <%= messages.error %>
+            </div>
+            <%}%>
+            <div class="text-center py-3">
+                <input type="submit" class="btn btn-outline-dark px-5">
+                <a href="/otpResendForgotSignup" class="btn btn-outline-dark px-5">Resend</a>
+            </div>
+            
+        </form>
+        <br><br>
+        
+    </div>
+    </div>
+</div>
+<!-- end login register -->
+
+<%- include('../partials/footer') %>

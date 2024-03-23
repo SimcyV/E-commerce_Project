@@ -1,0 +1,80 @@
+<%- include('../partials/header') %>
+
+
+    <!-- Login Register -->
+    <div class="row d-flex justify-content-center">
+        <div class="col-5 py-5">
+            <div class="card px-5 py-2 shadow-sm">
+                <h2 class="text-center">New Account</h2>
+                <form action="/signup" method="post" class="">
+                    <div class="form-group">
+                        <label for="name" class="form-group">Name</label>
+                        <input type="text" name="name" class="form-control border-dark" required id="name"
+                            onchange="validateUserName()">
+                        <p id="nameCheck" class="text-danger"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-group">Email address</label>
+                        <input type="email" name="email" class="form-control border-dark" id="email" required
+                            onchange="validateUserEmail()">
+                        <p id="emailCheck" class="text-danger"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="form-group">Password</label>
+                        <input id="password" type="password" name="password" required class="form-control border-dark"
+                            onchange="validatePassword()">
+                        <p id="messagePwd" class="text-danger"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmpassword" class="form-group">Confirm Password</label>
+                        <input id="confirmPassword" type="password" name="confirmpassword"
+                            class="form-control border-dark" required onchange=" checkPasswordMatch()">
+                        <p id="messagePwdMatch" class="text-danger"></p>
+                    </div>
+                    <% if (messages.error) { %>
+                        <div class="alert alert-danger">
+                            <%= messages.error %>
+                        </div>
+                    <% } %>
+                    <div class="text-center py-3">
+                        <input type="submit" class="btn btn-outline-dark px-5">
+                    </div>
+                </form>
+                <hr>
+                <div class="btn btn-secondary form-control border-dark d-flex justify-content-center my-3">
+                    <img src="https://cdn-icons-png.flaticon.com/128/104/104093.png" alt="Google Logo" class="mr-2" style="width: 20px;">
+                    <a href="/auth/google" class="text-decoration-none text-light">Continue with Google</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end login register -->
+    <%- include('../partials/footer') %>
+    
+    <script>
+ 
+      
+        // Function to enable or disable the submit button
+        function enableSubmitButton() {
+          const nameIsValid = validateUserName();
+          const emailIsValid = validateUserEmail();
+          const passwordIsValid = validatePassword();
+          const passwordMatch = checkPasswordMatch();
+      
+          // Get the submit button
+          const submitButton = document.querySelector('input[type="submit"]');
+      
+          // Enable the submit button if all conditions are met, otherwise disable it
+          if (nameIsValid && emailIsValid && passwordIsValid && passwordMatch) {
+            submitButton.disabled = false;
+          } else {
+            submitButton.disabled = true;
+          }
+        }
+      
+        // Add event listeners to input fields to trigger validation and enable/disable the submit button
+        document.getElementById('name').addEventListener('input', enableSubmitButton);
+        document.getElementById('email').addEventListener('input', enableSubmitButton);
+        document.getElementById('password').addEventListener('input', enableSubmitButton);
+        document.getElementById('confirmPassword').addEventListener('input', enableSubmitButton);
+      </script>

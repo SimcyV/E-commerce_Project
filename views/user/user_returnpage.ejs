@@ -1,0 +1,159 @@
+<%- include('../partials/signedin_header') %>
+
+
+<div class="container-fluid p-2">
+    <div class="row">
+        <div class="col-md-8 m-auto bg-white rounded shadow-sm p-3">
+            <h3 class="fw-bold text-center">Return Order</h3>
+            <hr>
+            <div class="p-3 shadow-sm d-flex justify-content-center align-items-center">
+
+                <table class="table table-borderless">
+                    <tr>
+                        <th>Customer & Address</th>
+                        <td>
+                            <strong>
+                                <%=newOrders.address.name%>
+                            </strong>
+                            <br>
+                            <%=newOrders.address.addressLane %> <br>
+                                <%=newOrders.address.city %> <br>
+                                    <%=newOrders.address.state%> - <%=newOrders.address.pincode%>
+                                            <br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Mobile</th>
+                        <td>
+                            <%=newOrders.address.mobile%>, <%=newOrders.address.altMobile%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Order ID</th>
+                        <td>ORD_<%=newOrders._id %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Order Date</th>
+                        <td>
+                            <%=newOrders.orderDate%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="vertical-align: middle;">Products</th>
+                        <td>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Name</th>
+                                    <th style="text-align: center; vertical-align: middle;">Quantity</th>
+                                    <th style="text-align: center; vertical-align: middle;">Image</th>
+                                </tr>
+                                <% newOrders.items.forEach((x)=> { %>
+                                    <tr>
+                                        <td style="vertical-align: middle;">
+                                            <%=x.productId.name %>
+                                        </td>
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <%=x.quantity%>
+                                        </td>
+                                        <td style="text-align: center; vertical-align: middle;"><img
+                                                src="/uploads/<%=x.productId.images[0]%>" alt=""
+                                                style="width: auto; height: 70px;"></td>
+                                    </tr>
+
+                                    <% }) %>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Total Quantity</th>
+                        <td>
+                            <%=newOrders.totalQuantity%> Nos.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Total Amount</th>
+                        <td>Rs <%=newOrders.totalAmount%>/-</td>
+                    </tr>
+                    <tr>
+                        <th>Payment Method</th>
+                        <td>
+                            <%=newOrders.paymentMethod %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Payment Status</th>
+                        <td>
+                            <% if (newOrders.paymentStatus==="Paid" ) { %>
+                                Paid
+                                <% } else {%>
+                                    Pending
+                                    <%}%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Order Status</th>
+                        <% if (newOrders.status==="Cancelled" || newOrders.status==="Shipped" ||
+                            newOrders.status==="Returned" || newOrders.status==="Order Placed" ||newOrders.status==="Return Pending") { %>
+                            <td class="fw-bold text-danger">
+                                <%= newOrders.status %>
+                            </td>
+                            <% } else if (newOrders.status==="Delivered" ){%>
+                                <td class="fw-bold text-success">
+                                    <%= newOrders.status %>
+                                </td>
+                                <%} else {%>
+                                    <td>
+                                        <%= newOrders.status %>
+                                    </td>
+
+                                    <%}%>
+
+                    </tr>
+                    <form method="post" action="#">
+                        <%= %>
+                            <tr>
+                                <th>
+                                    <!-- <input type="hidden" value="{{ orders.id }}" name="id"> -->
+                                    <!-- <select name="status" class="form-select" required>
+                                <option value="<%=newOrders.status %>" selected disabled>Order Options</option>
+                                <% if (newOrders.status==="Delivered") { %>
+                                    <option value="return">Return</option>                                     
+                                <% } else{%>
+                                    <option value="cancel">Cancel</option>
+                                    <%}%>
+                            </select> -->
+                                </th>
+                                
+
+
+                                            <!-- <td><a href=""  value="Back" class="btn btn-primary">Back</a></td> -->
+                                            <!-- <td><input type="submit" value="Update" class="btn btn-primary"></td> -->
+
+                            </tr>
+
+                    </form>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4 my-1">
+            <div class="bg-white rounded shadow-sm p-3">
+                <h3 class="fw-bold text-center">Return Form</h3>
+                <hr>
+                <div class="shadow-sm p-3">                    
+                    <form method="post">                          
+                        <div class="form-group">
+                            <label for="reason">Reason for return:</label>
+                            <textarea name="reason" id="reason" class="form-control" placeholder="Write the reason for return this product" required></textarea>
+                        </div>
+                        <div class="form-group text-right">
+                            <input type="submit" class="btn btn-primary" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,31 @@
+<%- include('../partials/admin_headerTwo') %>
+    <div class="container d-flex align-items-center" style="height: 90vh;">
+        <div class="row d-flex justify-content-center w-100">
+            <div class="col-md-6 p-5 border border-dark rounded">
+                <h2 class="text-center pb-4">ADD BRAND</h2>
+                <form action="/addBrand" method="post" class="form-row">     
+
+                    <% if (messages.success) { %>
+                        <div class="alert alert-success">
+                            <%= messages.success %>
+                        </div>
+                        <% } else if (messages.error) { %>
+                            <div class="alert alert-danger">
+                                <%= messages.error %>
+                            </div>
+                            <%}%>       
+                                   
+                    <input type="text" name="name" placeholder="Add new brand"
+                        class="form-control border-dark" id="name" required >
+                        <p id="nameCheck" class="text-danger"></p>
+                    <div class="text-center py-3">
+                        <input type="submit" value="Add" class="btn btn-outline-dark" style="width: 150px;">
+                        <a href="/brand" value="Cancel" class="btn btn-outline-dark"
+                        style="width: 150px;">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <%- include('../partials/footer') %>

@@ -1,0 +1,74 @@
+<%- include('../partials/signedin_header') %>
+
+
+<% if (messages.success) { %>
+    <div class="alert alert-success">
+        <%= messages.success %>
+    </div>
+    <% }else if (messages.error){ %>
+        <div class="alert alert-danger">
+            <%= messages.error %>
+        </div>
+        <%}%>
+            <h3 class="fw-bold text-center text-secondary">Wishlist</h3>
+
+            <% if (displayProduct!=null) { %>
+                <div class="row d-flex justify-content-center m-0" style="min-height: 61vh;">
+                    <% displayProduct. products.forEach((x)=> { %>
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-6">
+                            <div class="card my-2 p-2">
+                                <div style="position: absolute; right: 10px; top: 10px;">
+                                    <a href="/deleteWishlist/<%= x._id %>"><button
+                                            onclick="return confirm('Are you sure to delete from wishlist')"
+                                            class="fa-solid fa-xmark fs-3 text-danger btn"></button></a>                                               
+                                </div>
+                                <a href="/userProductDetails/<%= x._id %>" class="text-decoration-none text-dark">
+                                    <div class="d-flex justify-content-center">
+                                        <img src="/uploads/<%= x.images[0] %>" style="height: 200px;"
+                                            class="img-fluid" alt="" />
+                                    </div>
+                                    <hr />
+                                    <div class="d-flex justify-content-between">
+                                        <div class="">
+                                            <p class="fs-5 fw-bold m-0">
+                                                <%= x.name %>
+                                            </p>
+                                            <p class="text-secondary small fw-bold m-0">Rs <%= x.price - x.discount
+                                                    %>
+                                            </p>                                               
+                                            <% if (x.offerprice) { %>
+                                                <p class="text-success small fw-bold m-0">Offer Price: Rs <%=
+                                                        x.offerprice %>
+                                                </p>
+                                                <% } %>
+                                                <a href="/addtoCart/<%= x._id %>"><button>Add to Cart</button></a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+
+                <% }else { %>
+                    <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No Items Found</h3>
+                    <div class="text-center">
+                    <a href="/dashboard"><button>Add Products</button></a>
+                    </div>
+
+                    <%}%>
+
+                    <% if (messages.error) { %>
+                        <script>
+                            Swal.fire({
+                                position: "top",
+                                icon: "error",
+                                title: "<%= messages.error %>",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        </script>
+                    <% } %>
+                    
+
+<%- include('../partials/footer') %>

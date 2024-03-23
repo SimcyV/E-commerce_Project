@@ -1,0 +1,334 @@
+<%- include('../partials/signedin_header') %>
+
+
+
+    <div class="row bg-light m-0">
+        <section class="col-2"
+            style="display: flex; flex-wrap: nowrap; height: -webkit-fill-available; min-height: 67vh; overflow-x: hidden; overflow-y: hidden;">
+            <div class="d-flex flex-column flex-shrink-0 p-3 bg-white" style="width: 240px;">
+                <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32">
+                        <use xlink:href="#bootstrap" />
+                    </svg>
+                    <span class="fs-4 fw-bold">Profile</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <button id="profile-button" class="nav-link link-dark active" aria-current="page">
+                            Home
+                        </button>
+                    </li>
+                    <li>
+                        <button id="address-button" class="nav-link link-dark">
+                            Address
+                        </button>
+                    </li>
+                    <li>
+                        <button id="password-button" class="nav-link link-dark">
+                            Change Password
+                        </button>
+                    </li>
+                    <li>
+                        <a href="/userWallet" class="text-decoration-none"><button id="wallet-button" class="nav-link link-dark">
+                            Wallet
+                        </button></a>
+                    </li>
+                    <li>
+                        <a href="/orderList" class="text-decoration-none"><button id="orders-button" class="nav-link link-dark">
+                            Orders
+                        </button></a>
+                        
+                    </li>
+                    <li>
+                        <button id="referral-button" class="nav-link link-dark">
+                            Referrals
+                        </button>
+                    </li>
+                </ul>
+                <!-- <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+                    id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>mdo</strong>
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+            </div> -->
+            </div>
+        </section>
+        <div class="col-10">
+            <div class="row">
+
+
+                <div class="col-7 bg-light" id="profile" style="display: block;">
+                    <div class="d-flex shadow-sm rounded-3 m-5 bg-white">
+                        <div class="mx-5 my-3 d-flex align-items-center">
+                            <img style="height: 150px; width: auto;"
+                                src="https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png"
+                                alt="">
+                        </div>
+                        <div class="mx-5 my-3 d-flex align-items-center">
+                            <div>
+                                <h4 class="my-3 fw-bold">
+                                    <%= newuser.name %>
+                                </h4>
+                                <p class="">
+                                    <%= newuser.email%>
+                                </p>
+
+                                <% if (newuser.address.length>0) { %>
+                                    <p class="mb-1">
+                                        <%= newuser.address[0].houseName %>
+                                    </p>
+                                    <p class="mb-1">
+                                        <%= newuser.address[0].city %>, <%= newuser.address[0].state %> - <%=
+                                                    newuser.address[0].pincode %>
+                                    </p>
+
+                                    <p class="mb-3">
+                                        <%= newuser.address[0].mobile %>
+                                    </p>
+
+                                    <% } %>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="col-12" id="address" style="display: none;">
+                    <div class="d-flex m-1 my-2 justify-content-between bg-white shadow-sm rounded-3 p-3">
+                        <h3 class="fw-bold">USER ADDRESSES</h3>
+                        <a href="/addAddress" class="btn btn-outline-dark fw-bold m-0">Add Address</a>
+                    </div>
+                    <div class="row">
+                        <% if (newuser.address.length>0) { %>
+                            <% newuser.address.forEach((x)=> { %>
+                                <div class="col-md-4 col-12 my-1 p-2">
+                                    <div class="bg-white rounded shadow-sm p-3">
+                                        <p class="text-uppercase text-secondary"><strong class="text-dark fs-4">
+                                                <%=x.name%>
+                                            </strong> <br>
+                                            <%= x.houseName %><br>
+                                                <%= x.city %><br>
+                                                    <%= x.state %><br>
+                                                        <%= x.pincode %>
+                                        </p>
+                                        <p class="text-secondary"><strong class="text-dark">Contact: </strong>
+                                            <%=x.mobile %>, <%= x.altMobile %>
+                                        </p>
+                                        <div class="d-flex justify-content-end">
+                                            <a href="/editAddress/<%=x._id %>"
+                                                class="btn btn-outline-dark fw-bold mx-2">Edit</a>
+                                            <a href="/deleteAddress/<%=x._id %>" class="btn btn-outline-danger fw-bold"
+                                                onclick="return confirm('Are you really want ot delete the selected address')">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>
+                                    <% } else{%>
+                                        <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No Address Found
+                                        </h3>
+                                        <%}%>
+                    </div>
+                </div>
+
+
+                <div class="col-12" id="change-password" style="display: none;">
+                    <div class="row d-flex justify-content-center my-3">
+                        <div class="col-md-6 bg-white shadow-sm rounded-3">
+                            <h2 class="text-center">CHANGE PASSWORD</h2><BR></BR>
+                            <form action="/userPasswordChange" method="post" class="form-row">
+                                <label for="password" class="form-group">Current Password</label>
+                                <input type="password" id="password1" name="password" class="form-control border-dark"
+                                    required onchange="validatePassword1()">
+                                <p id="messagePwd1" class="text-danger"></p>
+                                <label for="new password" class="form-group">New Password</label>
+                                <input type="password" id="password" name="newpassword" class="form-control border-dark"
+                                    required onchange="validatePassword()">
+                                <p id="messagePwd" class="text-danger"></p>
+                                <label for="confirmpassword" class="form-group">Confirm Password</label>
+                                <input type="password" id="confirmPassword" name="confirmpassword"
+                                    class="form-control border-dark" required onchange="checkPasswordMatch()">
+                                <p id="messagePwdMatch" class="text-danger"></p>
+                                <% if (messages.success) { %>
+                                    <div class="alert alert-success">
+                                        <%= messages.success %>
+                                    </div>
+                                    <% }else if (messages.error){ %>
+                                        <div class="alert alert-danger">
+                                            <%= messages.error %>
+                                        </div>
+                                        <%}%>
+                                            <div class="text-center py-3">
+                                                <input type="Submit" class="btn btn-outline-dark px-5">
+                                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="wallet" style="display: none;">Wallet</div>
+                
+                <div class="col-12" id="referralDiv" style="display: none;">
+                    <div class="d-flex justify-content-between bg-white shadow-sm rounded-3 p-3 m-3">
+                        <p class="fs-4 fw-bold m-0">Referrals</p>
+                        <button type="button" id="referral-link" value="http://localhost:3000/signup?ref=<%= newuser._id %>" class="btn btn-outline-dark">Click Here to Copy the Referral Link</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between bg-white shadow-sm rounded-3 p-3 m-3">
+                                <table class="table table-borderless text-center">
+                                    <tr>
+                                        <th>SI No</th>
+                                        <th>User Name</th>
+                                        <th>Cash Earned</th>
+                                    </tr>
+                                    <% newuser.referredUsers.forEach((x,index) => { %>
+                                        
+    
+                                        <tr>
+                                            <td><%= index+1 %></td>
+                                            <td><%=x.name  %></td>
+                                            <td>Rs.100</td>
+                                        </tr>
+                                     
+                                    <% }) %>
+                                  
+
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <th class="fs-4 fw-bold">Total Earned: Rs.<%= newuser. referedAmount %></th>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <% if (newuser.rereferredBy) { %>
+                        <p class="text-center">You were Referred by <span class="fw-bold text-success"><%=newuser.rereferredBy.name  %></span></p>
+                     
+                    <% } %>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/script.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const profileButton = document.getElementById("profile-button");
+            const addressButton = document.getElementById("address-button");
+            const passwordButton = document.getElementById("password-button");
+            const walletButton = document.getElementById("wallet-button");
+            const referralButton = document.getElementById("referral-button");
+
+            const profileDiv = document.getElementById("profile");
+            const addressDiv = document.getElementById("address");
+            const passwordDiv = document.getElementById("change-password");
+            const walletDiv = document.getElementById("wallet");
+            const referralDiv = document.getElementById("referralDiv");
+
+            function showProfile() {
+                profileDiv.style.display = "block";
+                addressDiv.style.display = "none";
+                passwordDiv.style.display = "none";
+                walletDiv.style.display = "none";
+                referralDiv.style.display = "none";
+
+                setActiveButton(profileButton);
+            }
+
+            function showAddress() {
+                profileDiv.style.display = "none";
+                addressDiv.style.display = "block";
+                passwordDiv.style.display = "none";
+                walletDiv.style.display = "none";
+                referralDiv.style.display = "none";
+
+                setActiveButton(addressButton);
+            }
+
+            function showChangePassword() {
+                profileDiv.style.display = "none";
+                addressDiv.style.display = "none";
+                passwordDiv.style.display = "block";
+                walletDiv.style.display = "none";
+                referralDiv.style.display = "none";
+
+                setActiveButton(passwordButton);
+            }
+
+            function showWallet() {
+                profileDiv.style.display = "none";
+                addressDiv.style.display = "none";
+                passwordDiv.style.display = "none";
+                walletDiv.style.display = "block";
+                referralDiv.style.display = "none";
+
+                setActiveButton(walletButton);
+            }
+
+            function showReferral() {
+                profileDiv.style.display = "none";
+                addressDiv.style.display = "none";
+                passwordDiv.style.display = "none";
+                walletDiv.style.display = "none";
+                referralDiv.style.display = "block";
+
+                setActiveButton(referralButton);
+            }
+
+            function setActiveButton(button) {
+                // Remove "active" class from all buttons
+                profileButton.classList.remove("active");
+                addressButton.classList.remove("active");
+                passwordButton.classList.remove("active");
+                walletButton.classList.remove("active");
+                referralButton.classList.remove("active");
+
+                // Add "active" class to the clicked button
+                button.classList.add("active");
+            }
+
+            profileButton.addEventListener("click", showProfile);
+            addressButton.addEventListener("click", showAddress);
+            passwordButton.addEventListener("click", showChangePassword);
+            walletButton.addEventListener("click", showWallet);
+            referralButton.addEventListener("click", showReferral);
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const referralLinkButton = document.getElementById("referral-link");
+
+            referralLinkButton.addEventListener("click", function () {
+                // Select the text in the button
+                const linkToCopy = document.createElement("textarea");
+                linkToCopy.value = referralLinkButton.value;
+                document.body.appendChild(linkToCopy);
+                linkToCopy.select();
+
+                // Copy the text to the clipboard
+                document.execCommand("copy");
+
+                // Clean up and remove the temporary textarea
+                document.body.removeChild(linkToCopy);
+
+                // Optionally, provide some feedback to the user
+                alert("Referral link copied to clipboard!");
+            });
+        });
+    </script>
+
+
+    <%- include('../partials/footer') %>

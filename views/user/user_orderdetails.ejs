@@ -1,0 +1,245 @@
+<%- include('../partials/signedin_header')%>
+
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="/cart">Cart</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="/checkOut">Checkout</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="/orderList">Order Details</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="/userDetailViewOrder">Order View</a></li>
+        </ol>
+    </nav>
+    <!-- end of breadcrumb -->
+
+
+
+
+
+    <div class="container-fluid p-2">
+        <div class="row">
+            <div class="col-10 m-auto bg-white rounded shadow-sm p-3">
+                <h3 class="fw-bold text-center">Order</h3>
+                <hr>
+                <div class="p-3 shadow-sm d-flex justify-content-center align-items-center">
+
+                    <table class="table table-borderless">
+                        <tr>
+                            <th>Customer & Address</th>
+                            <td>
+                                <strong>
+                                    <%=newOrders.address.name%>
+                                </strong>
+                                <br>
+                                <%=newOrders.address.addressLane %> <br>
+                                    <%=newOrders.address.city %> <br>
+                                        <%=newOrders.address.state%> - <%=newOrders.address.pincode%>
+                                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Mobile</th>
+                            <td>
+                                <%=newOrders.address.mobile%>, <%=newOrders.address.altMobile%>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Order ID</th>
+                            <td>ORD_<%=newOrders._id %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Order Date</th>
+                            <td>
+                                <%=new Date(newOrders.orderDate).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+                                    %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="vertical-align: middle;">Products</th>
+                            <td>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th style="text-align: center; vertical-align: middle;">Quantity</th>
+                                        <th style="text-align: center; vertical-align: middle;">Image</th>
+                                    </tr>
+                                    <% newOrders.items.forEach((x)=> { %>
+                                        <tr>
+                                            <td style="vertical-align: middle;">
+                                                <%=x.productId.name %>
+                                            </td>
+                                            <td style="text-align: center; vertical-align: middle;">
+                                                <%=x.quantity%>
+                                            </td>
+                                            <td style="text-align: center; vertical-align: middle;"><img
+                                                    src="/uploads/<%=x.productId.images[0]%>" alt=""
+                                                    style="width: auto; height: 70px;"></td>
+                                        </tr>
+
+                                        <% }) %>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Total Quantity</th>
+                            <td>
+                                <%=newOrders.totalQuantity%> Nos.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Coupon Discount</th>
+                            <% if (newOrders.couponDiscount===0) { %>
+                                <td>
+                                    Not Applicable
+                                </td>
+                                <% } else{%>
+                                    <td>
+                                        Rs <%=newOrders.couponDiscount%>
+                                    </td>
+                                    <%}%>
+                        </tr>
+
+                        <tr>
+                            <th>Total Amount</th>
+                            <td>Rs <%=newOrders.totalAmount%>/-</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Method</th>
+                            <td>
+                                <%=newOrders.paymentMethod %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Payment Status</th>
+                            <td>
+                                <%= newOrders.paymentStatus %>
+                            </td>
+                        </tr>
+
+                        <% if (newOrders.deliveryDate) { %>                         
+                            <tr>
+                                <th>Delivered Date</th>
+                                <td>
+                                    <%=new Date(newOrders.deliveryDate).toLocaleString('en-US', { timeZone: 'Asia/Kolkata'
+                                        }) %>
+                                </td>
+                            </tr>
+                        <% } %>
+                        <% if (newOrders.returnDate) { %>
+
+                            <tr>
+                                <th>Returned Date</th>
+                                <td>
+                                    <%=new Date(newOrders.returnDate).toLocaleString('en-US', { timeZone: 'Asia/Kolkata'
+                                        }) %>
+                                </td>
+                            </tr>
+                            <% } %>
+                                <tr>
+                                    <th>Order Status</th>
+                                    <% if (newOrders.status==="Cancelled" || newOrders.status==="Shipped" ||
+                                        newOrders.status==="Returned" || newOrders.status==="Order Placed"
+                                        ||newOrders.status==="Return Pending" ) { %>
+                                        <td class="fw-bold text-danger">
+                                            <%= newOrders.status %>
+                                        </td>
+                                        <% } else if (newOrders.status==="Delivered" ){%>
+                                            <td class="fw-bold text-success">
+                                                <%= newOrders.status %>
+                                            </td>
+                                            <%} else {%>
+                                                <td>
+                                                    <%= newOrders.status %>
+                                                </td>
+
+                                                <%}%>
+
+                                </tr>
+                                <% if (newOrders.deliveryDate) { %>
+                         
+                                    <tr>
+                                        <th>Return Expiry</th>
+                                        <td>
+                                            <% var deliveryDate=new Date(newOrders.deliveryDate);
+                                                deliveryDate.setDate(deliveryDate.getDate() + 5); var
+                                                formattedDeliveryDate=deliveryDate.toLocaleString('en-US', {
+                                                timeZone: 'Asia/Kolkata' }); %>
+                                                <%= formattedDeliveryDate %>
+                                        </td>
+           
+                                    </tr>
+                         <% } %>
+                                
+
+                                <form method="post" action="#">
+                                    <%= %>
+                                        <tr>
+                                            <th>
+
+                                            </th>
+                                            <% if (newOrders.status==="Order Placed" || newOrders.status==="Shipped" ) {
+                                                %>
+                                                <td><a href="/cancelOrder/<%= newOrders._id %>"
+                                                        class="btn btn-outline-danger fw-bold"
+                                                        onclick="return confirm('Are you really want to Cancel the order')">Cancel
+                                                        Order</a></td>
+
+                                                <% } else if (newOrders.status==="Delivered" ) {%>
+                                                    <td><a href="/returnOrder/<%= newOrders._id %>"
+                                                            class="btn btn-outline-danger fw-bold"
+                                                            onclick="return confirm('Are you really want to Return the order')">Return
+                                                            Order</a></td>
+
+
+
+                                                    <%}else if(newOrders.status==="Return Pending" ){%>
+                                                        <td>
+                                                            <p class="fw-bold text-danger">Admin approval pending</p>
+                                                        </td>
+
+                                                        <%}else if(newOrders.status==="Returned" ){%>
+                                                            <td>
+                                                                <p class="fw-bold text-success">Product Returned
+                                                                    Succesfully</p>
+                                                            </td>
+                                                            <%}else {%>
+                                                                <td>
+                                                                    <p class="fw-bold text-success">Product Cancelled
+                                                                        Succesfully</p>
+                                                                </td>
+
+                                                                <%}%>
+
+
+
+
+
+                                        </tr>
+
+                                </form>
+                                <% if (newOrders.paymentStatus==="Paid" ) { %>
+                                    <td>
+                                        <a href="/invoice/<%= newOrders._id %>"><button
+                                                class="btn btn-outline-dark">Download
+                                                Invoice</button></a>
+
+                                    </td>
+
+                                    <% } %>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <%- include('../partials/footer') %>

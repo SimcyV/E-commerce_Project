@@ -1,0 +1,53 @@
+<%- include('../partials/signedin_header') %>
+
+<!-- Breadcrumbs -->
+<!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a href="/userAddress">Address</a></li>
+    </ol>
+</nav> -->
+<!-- end of breadcrumb -->
+
+
+<% if (messages.success) { %>
+    <div class="alert alert-success">
+        <%= messages.success %>
+    </div>
+    <% }else if (messages.error){ %>
+        <div class="alert alert-danger">
+            <%= messages.error %>
+        </div>
+        <%}%>
+        <h3 class="fw-bold text-secondary my-3">USER ADDRESSES</h3>
+            <div class="d-flex my-3 mx-5 justify-content-end">
+                <a href="/addAddress" class="btn btn-outline-dark fw-bold">Add Address</a>
+                <!-- <a href="<%=  %>" class="btn btn-outline-danger fw-bold">Delete Address</a> -->
+            </div>
+            <div class="row p-2 d-flex justify-content-left my-3 mx-5" style="min-height: 61vh;">
+                <% if (addresses.length>0) { %>
+                    <% addresses.forEach((x)=> { %>
+                        <div class="col-md-4 col-12 my-1 p-2">
+                            <div class="bg-light rounded shadow-sm p-3">
+                                <p class="text-uppercase text-secondary"><strong class="text-dark fs-4"><%=x.name%></strong> <br>
+                                    <%= x.addressLane %><br> <%= x.city %><br>
+                                            <%= x.state %><br> <%= x.pincode %>
+                                </p>
+                                <p class="text-secondary"><strong class="text-dark">Contact: </strong>
+                                    <%=x.mobile %>, <%= x.altMobile %>
+                                </p>
+                                <div class="d-flex justify-content-end">
+                                    <a href="/editAddress/<%=x._id %>"
+                                        class="btn btn-outline-dark fw-bold mx-2">Edit</a>
+                                    <a href="/deleteAddress/<%=x._id %>"
+                                        class="btn btn-outline-danger fw-bold" onclick="return confirm('Are you really want ot delete the selected address')">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>                     
+                <% } else{%>
+                    <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No Address Found</h3>
+                    <%}%>
+            </div>
+
+<%- include('../partials/footer') %>

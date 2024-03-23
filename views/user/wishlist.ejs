@@ -1,0 +1,94 @@
+<%- include('../partials/signedin_header') %>
+
+
+<% if (messages.success) { %>
+    <div class="alert alert-success">
+        <%= messages.success %>
+    </div>
+    <% }else if (messages.error){ %>
+        <div class="alert alert-danger">
+            <%= messages.error %>
+        </div>
+        <%}%>
+            <h3 class="fw-bold text-center text-secondary">Wishlist</h3>
+
+           <% if (displayProduct) { %>
+            <div class="row">
+
+                <% displayProduct.products.forEach(x=> { %>
+
+                    <% if (x.stock>0 && x.display==="Active" ) { %>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12 my-3">
+                            <div class="p-3 text-center rounded" style="box-shadow: 0 0 4px rgba(0, 0, 0, 0.508);">
+                                <a href="/userProductDetails/<%= x._id %>" style="text-decoration: none; color: unset;">
+                                    <div style="position: relative;">
+                                        <img src="/uploads/<%= x.images[0] %>" class="img-fluid" alt="No preview"
+                                            style="height: 200px;">
+                                        <div class="d-flex justify-content-between">
+                                            <p class="font-weight-bold text-left"
+                                                style="white-space: nowrap; width: 70%; overflow: hidden; text-overflow: ellipsis;">
+                                                <%= x.name %>
+                                            </p>
+                                            <div class="d-flex">
+                                                <p class="font-weight-bold small text-danger"><del>₹<%= x.price %>
+                                                    </del></p>
+                                                <p class="font-weight-bold text-success">₹<%= x.price-x.discount %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% if ( x.offerprice ) { %>
+                                    <div style="position: absolute; top: 10px; right: 20px;">
+                                        <span class="rounded-pill px-2 py-1 alert-success text-success fw-bold small">Now @ ₹<%= x.offerprice %></span> 
+                                        <a href="/deleteWishlist/<%= x._id %>">
+                                            <button onclick="return confirm('Are you sure to delete from wishlist')" class="fa-solid fa-xmark fs-5 text-danger btn"></button>
+                                        </a>  
+                                    </div>
+                                    <%} else {%>
+                                        <div style="position: absolute; top: 10px; right: 20px;">
+                                            <a href="/deleteWishlist/<%= x._id %>">
+                                                <button onclick="return confirm('Are you sure to delete from wishlist')" class="fa-solid fa-xmark fs-5 text-danger btn"></button>
+                                            </a>  
+                                        </div>
+                                     
+                                    <%}%>
+                                </a>
+                                <div class="d-flex justify-content-between align-Items-center p-0">
+                                    <button class="btn btn-outline-dark" onclick="addToCart('<%= x._id %>')">Add to
+                                        Cart</button>
+                                    <a href="/wishlist/<%= x._id %>" class="btn fs-3 text-danger">&hearts;</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <% } %>
+
+
+                            <% }) %>
+
+
+
+            </div>
+
+                <% }else { %>
+                    <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No Items Found</h3>
+                    <div class="text-center">
+                    <a href="/dashboard"><button>Add Products</button></a>
+                    </div>
+
+                    <%}%>
+
+                    <% if (messages.error) { %>
+                        <script>
+                            Swal.fire({
+                                position: "top",
+                                icon: "error",
+                                title: "<%= messages.error %>",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        </script>
+                    <% } %>
+                    
+
+<%- include('../partials/footer') %>

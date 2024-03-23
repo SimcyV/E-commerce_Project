@@ -1,0 +1,176 @@
+<%- include('../partials/signedin_header') %>
+
+
+
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="/userProductDetails">Product Details</a></li>
+        </ol>
+    </nav>
+    <!-- end of breadcrumb -->
+
+
+
+
+    <div class="container">
+
+        <div class="row d-flex justify-content-center">
+
+            <div class="col-md-7 py-5 my-5">
+                <div class="row">
+
+                    <div class="col-2">
+                        <div class="col-12 my-1">
+                            <img class="thumbnail-image" src="/uploads/<%= productToDisplay.images[0] %>"
+                                style="width: 100px; height: 100px;" alt="">
+                        </div>
+                        <div class="col-12 my-1">
+                            <img class="thumbnail-image" src="/uploads/<%= productToDisplay.images[1] %>"
+                                style="width: 100px; height: 100px;" alt="">
+                        </div>
+                        <div class="col-12 my-1">
+                            <img class="thumbnail-image" src="/uploads/<%= productToDisplay.images[2] %>"
+                                style="width: 100px; height: 100px;" alt="">
+                        </div>
+                        <div class="col-12 my-1">
+                            <img class="thumbnail-image" src="/uploads/<%= productToDisplay.images[3] %>"
+                                style="width: 100px; height: 100px;" alt="">
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <div class="col-12 d-flex justify-content-center" id="sree">
+                            <img class="selected-image img-fluid" src="/uploads/<%= productToDisplay.images[0] %>"
+                                style="width: auto; height: 450px;" alt="">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-5 py-5 my-5">
+                <!-- <table class="table table-borderless"> -->
+                <p class="fw-bold fs-3">
+                    <%= productToDisplay.name%>
+                </p>
+
+                <p class="text-secondary small">
+                    <%= productToDisplay.description%>
+                </p>
+
+                <p class="text-secondary ">Tags: <%= productToDisplay.tags%>
+                </p>
+
+                <p class="text-secondary ">Category: <%= productToDisplay.category.name%>
+                </p>
+
+                <p class="text-secondary ">Brand: <%= productToDisplay.brand.name%>
+                </p>
+
+                <p class="text-secondary">Price: <span class="fw-bold text-dark">₹<%= productToDisplay.price%></span>
+                </p>
+
+                <p class="text-secondary">Discount Price: <span class="fw-bold text-danger">₹<%=
+                            productToDisplay.discount%></span></p>
+                            
+                    <% if (productToDisplay.offerprice>0) { %>
+                        <p class="text-secondary">Offer Price: <span class="fw-bold text-success">₹<%= productToDisplay.offerprice%></span></p>
+                     
+                    <% }else { %>
+                        <p class="text-secondary">Offer Price: <span class="fw-bold text-success">₹<%=productToDisplay.price-productToDisplay.discount%></span></p>
+
+                        <%}%>
+
+                    
+
+                <!-- <p class="text-secondary">Offer Price: <span class="fw-bold text-success">₹</span></p> -->
+
+                <p class="text-secondary "> Stock: <%= productToDisplay.stock%>
+                </p>
+
+                <p class="text-secondary "> Status:
+                    <% if (productToDisplay.stock> 0 ) { %>
+                        <span class="text-success fw-bold">
+                            <%= productToDisplay.status %>
+                        </span>
+
+                        <% } else { %>
+                            <span class="text-danger fw-bold">
+                                <%= productToDisplay.status %>
+                            </span>
+                            <% } %>
+                </p>
+
+                <p class="text-secondary ">Display:
+                    <% if (productToDisplay.display==='Active' ) { %>
+                        <span class="text-success fw-bold">
+                            <%= productToDisplay.display %>
+                        </span>
+
+                        <% } else if (productToDisplay.display==='Blocked' ) { %>
+                            <span class="text-danger fw-bold">
+                                <%= productToDisplay.display %>
+                            </span>
+                            <% } %>
+                </p>
+
+                <div>
+                    <button class="btn btn-outline-dark me-3" onclick="addToCart('<%= productToDisplay._id %>')">Add to
+                        Cart</button>
+                    <!-- <a href="/addtoCart/<%= productToDisplay._id %>" class="btn btn-outline-success me-3">Add to Cart</a> -->
+                    <a href="/buyNow/<%= productToDisplay._id %>" class="btn btn-outline-success mx-4">Buy Now</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+        <script>
+            $(document).ready(function () {
+                // Select all elements with the class "thumbnail-image"
+                $(".thumbnail-image").click(function () {
+                    // Get the source (URL) of the clicked thumbnail image
+                    var newImageSrc = $(this).attr("src");
+                    // Set the main image source to the clicked thumbnail image
+                    $(".selected-image").attr("src", newImageSrc);
+                });
+            });
+        </script>
+
+
+
+        <script>
+            function addToCart(productId) {
+                $.ajax({
+                    url: `/addtoCart/${productId}`,
+                    method: 'get',
+                    success: function (Response) {
+                        if (Response.success) {
+                            Swal.fire({
+                                position: "top",
+                                icon: "success",
+                                title: "Item added to cart",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            // alert('item added to cart......!!!');
+                        }
+                        else {
+                            Swal.fire({
+                                position: "top",
+                                icon: "error",
+                                title: "stock not available at the moment",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+
+                            // alert("stock not available at the moment ")
+                        }
+                    }
+                })
+            }
+        </script>

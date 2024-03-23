@@ -1,0 +1,31 @@
+<%- include('../partials/header') %>
+
+
+  <!-- Login Register -->
+  <div class="container mx-auto row">
+    <div class="col-12 col-md-5 mx-auto p-5">
+        <div class="card p-4">
+        <h2 class="text-center">PASSWORD RECOVERY</h2><BR></BR>
+        <form action="/pwdRecovery" method="post" class="px-3">
+            <label for="password" class="form-group">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter the password" class="form-control border-dark" required onchange="validatePassword()">
+            <p id="messagePwd" class="text-danger"></p>
+            <label for="confirmpassword" class="form-group">Confirm Password</label>
+            <input type="password"  id="confirmPassword" name="confirmpassword" placeholder="Re-enter the password" class="form-control border-dark" required onchange="checkPasswordMatch()">
+            <p id="messagePwdMatch" class="text-danger"></p>
+            <% if (messages.error) { %>
+                <div class="alert alert-danger">
+                    <%= messages.error %>
+                </div>
+            <% } %>
+            <div class="text-center py-3">
+                <input type="submit" class="btn btn-outline-dark px-5">
+            </div>
+        </form>           
+    </div>
+    </div>
+</div>
+<!-- end login register -->
+
+
+<%- include('../partials/footer') %>

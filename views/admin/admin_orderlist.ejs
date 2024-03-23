@@ -1,0 +1,92 @@
+<%- include('../partials/admin_headerTwo') %>
+
+
+   
+    <div class="container-fluid p-2" >
+        <div class="row">
+            <div class="col-10 m-auto bg-white rounded shadow-sm p-3">
+                <div class="d-flex justify-content-between">
+                    <h3 class="fw-bold text-center">Customers Order</h3>
+                    
+<% if (messages.success) { %>
+    <div class="alert alert-success">
+        <%= messages.success %>
+    </div>
+    <% } else if (messages.error) { %>
+        <div class="alert alert-danger">
+            <%= messages.error %>
+        </div>
+        <%}%>
+
+                    <div>
+                        <button class="btn btn-outline-dark" ><a href="" class="text-decoration-none">Returned Product</a></button>
+                        <a href="/returnPending" class="btn btn-outline-dark">Return Pending</a>
+                    </div>
+                </div>
+                <hr>
+                <% if (orders && orders.length>0) { %>
+                <table class="table table-bordered text-center">
+                        <tr>
+                            <th> Sl No</th>                        
+                            <th>Customer Name</th>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Payment <br>Method</th>
+                            <th>Total <br>(Rs)</th>
+                            <th>Order Status</th>                        
+                            <th>Payment Status</th>
+                            <th>View</th>
+                        </tr>
+                        <% orders.forEach((x,index) => { %>
+                        <tr>
+                            <td><%= index+1 %></td>
+                            <td><%=x.address.name  %></td>
+                            <td>ORD_<%=x._id  %></td>
+                            <td><%= new Date(x.orderDate).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }) %></td>
+                            <td><%= x.paymentMethod %></td>
+                            <td><%=x.totalAmount  %>/-</td>
+                            <% if (x.status==="Cancelled" ||x.status==="Shipped" || x.status==="Returned") { %>
+                                <td class="text-danger"><%=x.status  %></td>                             
+                            <% } else {%>
+                                <td class="text-success"><%=x.status  %></td>  
+                                <%}%>
+                                <% if (x.paymentStatus==="Pending") { %>
+                                    <td class="text-danger"><%=x.paymentStatus   %></td>                             
+                                <% } else {%>
+                                    <td class="text-success"><%=x.paymentStatus  %></td>  
+                                    <%}%>   
+                                    
+                                    
+                                    
+                            <td><a href="/adminViewOrder/<%= x._id %>" class="btn btn-outline-dark">View</a> </td>
+                        </tr>
+                    <% }) %>
+                </table>
+                <% }else { %>
+                    <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No Orders Found</h3>
+                    <%}%>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <% if (orders.length > 0) { %>
+        <div class="d-flex justify-content-between m-auto w-50 align-items-center mt-3">
+            <p>Showing <%= (currentPage - 1) * perPage + 1 %>-
+                <% if(currentPage === totalPages){%>
+                    <%=totalCount%>
+                    <%}else{%>
+                  <%= currentPage * perPage  %>
+                  <%}%>
+                   results from <%= totalCount %></p>
+                <ul class="pagination">
+                  <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                      <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                  <% } %>
+                </ul>
+              </div>
+              <% } %>
+<%- include('../partials/footer') %>

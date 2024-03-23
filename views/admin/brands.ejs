@@ -1,0 +1,95 @@
+<%- include('../partials/admin_headerTwo') %>
+<div class="container">
+    <div class="row">
+      
+        <div class="col-md-6">
+            <h1 class="text-center">BRANDS</h1>
+        </div>
+       
+        <div class="col-md-6 d-flex justify-content-end mt-4">
+            <a href="/addBrand" class="btn btn-outline-dark" style="width: 150px;">Add Brand</a>
+        </div>
+    </div>
+</div>
+
+
+
+<% if (messages.success) { %>
+    <div class="alert alert-success">
+        <%= messages.success %>
+    </div>
+    <% } else if (messages.error) { %>
+        <div class="alert alert-danger">
+            <%= messages.error %>
+        </div>
+        <%}%>
+
+
+
+        <% if (newBrands) { %>
+            <div class="container">
+                <div class="row d-flex justify-content-center mt-4">
+                    <div class="col-md-6 p-2 border border-dark rounded">
+                        <table class="table table-striped text-center">
+                            <tr>
+                                <!-- <th class="bg-dark text-white">Sl No.</th> -->
+                                <th class="bg-dark text-white">Brand Name</th>
+                                <th class="bg-dark text-white" colspan="3">Actions</th>
+                            </tr>
+                            <tr>
+                                <% newBrands.forEach(x=> { %>
+                            <tr>
+                                <td>
+                                    <%= x.name %>
+                                </td>
+
+                                <td>
+                                    <a href="/editbrand/<%= x._id %>" class="btn btn-outline-success">Edit</a>
+                                </td>
+                                <td>
+                                    <% if (x.status === 'Active') { %>
+                                        <a href="/blockbrand/<%=x._id%>"><button onclick="return confirm('Are you sure you want to  block the brand')" class="btn btn-outline-danger " >Block</button></a>
+                                    <% } else if (x.status === 'Blocked') { %>
+                                        <a href="/blockbrand/<%=x._id%>"><button onclick="return confirm('Are you sure you want to  unblock the brand')" class="btn btn-outline-success">Unblock</button></a>
+                                    <% } %>
+                                  </td> 
+                                  <td>
+                                    <a href="/deletebrand/<%=x._id%>"><button onclick="return confirm('Are you sure you want to  unblock the brand')" class="btn btn-outline-success">Delete</button></a>
+                                </td>
+                            </tr>
+                            <% }) %>
+                                </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            
+            <% if (newBrands.length===0) { %>
+                <h3 class="alert alert-danger w-50 m-auto my-5 text-center"> No Brands Found</h3>
+             
+            <% } %>
+
+                
+    </div>
+    
+         
+   <% if (newBrands.length > 0) { %>
+    <div class="d-flex justify-content-between m-auto w-50 align-items-center mt-3">
+        <p>Showing <%= (currentPage - 1) * perPage + 1 %>-
+            <% if(currentPage === totalPages){%>
+                <%=totalCount%>
+                <%}else{%>
+              <%= currentPage * perPage  %>
+              <%}%>
+               results from <%= totalCount %></p>
+            <ul class="pagination">
+              <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                  <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                </li>
+              <% } %>
+            </ul>
+          </div>
+          <% } %>
+    <%- include('../partials/footer') %>

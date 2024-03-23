@@ -1,0 +1,131 @@
+<%- include('../partials/signedin_header') %>
+
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a href="/filters">Filter</a></li>
+    </ol>
+</nav>
+<!-- end of breadcrumb -->
+
+
+
+
+<% if (messages.success) { %>
+    <div class="alert alert-success">
+        <%= messages.success %>
+    </div>
+<% }else if (messages.error){ %>
+  <div class="alert alert-danger">
+    <%= messages.error %>
+</div>
+<%}%>
+
+
+<div class="container-fluid">
+    <div class="row p-1" style="min-height: 65vh;">
+        <div class="col-md-2 p-2 bg-white my-2">
+            <h3 class="text-bold text-center">Filter Products</h3>
+            <hr>
+            <form action="/filters" method="post">
+                <div>
+                    <button type="button" class="btn btn-toggle align-items-center rounded collapsed my-1" data-bs-toggle="collapse" data-bs-target="#category-collapse" aria-expanded="true">
+                        Categories
+                    </button>
+                    <div class="collapse ps-5" id="category-collapse">
+                        <% newcategory.forEach((x) => { %>
+                            <div class="form-row">
+                                <input type="radio" name="category" id="category_<%= x._id %>" value="<%= x._id %>">
+                                <label for="category_<%= x._id %>" class="my-0 mx-1"><%= x.name %></label>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-toggle align-items-center rounded collapsed my-1" data-bs-toggle="collapse" data-bs-target="#brand-collapse" aria-expanded="true">
+                        Brands
+                    </button>
+                    <div class="collapse ps-5" id="brand-collapse">
+                        <% newbrand.forEach((x)=> { %>
+                            <div class="form-row">
+                                <input type="radio" name="brand" id="brand_<%= x._id %>" value="<%= x._id %>">
+                                <label for="brand_<%= x._id %>" class="my-0 mx-1"><%= x.name %></label>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a href="/filters" class="btn btn-outline-dark mt-3">Reset</a>
+                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
+                </div>
+            </form>                
+        </div>
+
+
+<% if (displayProduct.length > 0) { %>
+
+        <div class="col-md-10 p-2">
+            <form action="/sortby" method="post" class="d-flex align-items-center justify-content-end">
+                <label for="" class="m-0">Sort-By:&nbsp;</label>
+                <select name="sortBy" id="" style="outline: unset; border-radius: 5px; padding: 0 5px;">
+                    <!-- <option value="Popularity">Popularity</option> -->
+                    <option selected disabled>Select any sort...</option>
+                    <option value="Price-low-high">Price: low-high</option>
+                    <option value="Price-high-low">Price: high-low</option>
+                    <option value="A-Z">A-Z</option>
+                    <option value="Z-A">Z-A</option>
+                    <!-- <option value="New-Arrival">New Arrival</option> -->
+                </select>
+            </form>
+            <div class="row">
+                <% displayProduct.forEach((x)=> { %>
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-6">
+                        <div class="card my-2 p-2">
+                            <a href="/userProductDetails/<%=x._id %>" class="text-decoration-none text-dark">
+                                <div class="d-flex justify-content-center">
+                                    <img src="/uploads/<%= x.images[0] %>" style="height: 200px;" class="img-fluid"
+                                        alt="" />
+                                </div>
+                                <hr />
+                                <div class="d-flex justify-content-between">
+                                    <div class="">
+                                        <p class="fs-5 fw-bold m-0">
+                                            <%=x.name %>
+                                        </p>
+                                        <P class="text-secondary small fw-bold m-0">Rs <%= x.price-x.discount %>
+                                        </P>
+
+                                        <% if (x.offerprice) { %>
+                                            <p class="text-success small fw-bold m-0">Offer Price: Rs <%= x.offerprice %></p>
+                                        <% } %>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <a href="#"><i class="fa-regular fa-heart text-danger fw-bold fs-4"></i></a>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+<% } else { %>
+<h3 class="alert alert-danger w-50 m-auto my-5 text-center">No Match Found</h3>
+<% } %>
+
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectElement = document.querySelector("select[name='sortBy']");
+        selectElement.addEventListener("change", function () {
+            this.parentNode.submit();
+        });
+    });
+</script>
+
+
+<%- include('../partials/footer') %>

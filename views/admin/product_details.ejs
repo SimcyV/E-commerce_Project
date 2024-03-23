@@ -1,0 +1,94 @@
+<%- include('../partials/admin_headerTwo') %>
+
+<div class="container">
+
+    <div class="row d-flex justify-content-center">
+
+        <div class="col-md-7 py-5 my-5">
+            <div class="row">
+
+                <div class="col-2">
+                    <div class="col-12 my-1">
+                        <img class="thumbnail-image" src="/uploads/<%= productToDisplay.images[0] %>"
+                            style="width: 100px; height: 100px;" alt="">
+                    </div>
+                    <div class="col-12 my-1">
+                        <img class="thumbnail-image" src="/uploads/<%= productToDisplay.images[1] %>"
+                            style="width: 100px; height: 100px;" alt="">
+                    </div>
+                    <div class="col-12 my-1">
+                        <img class="thumbnail-image" src="/uploads/<%= productToDisplay.images[2] %>"
+                            style="width: 100px; height: 100px;" alt="">
+                    </div>
+                    <div class="col-12 my-1">
+                        <img class="thumbnail-image" src="/uploads/<%= productToDisplay.images[3] %>"
+                            style="width: 100px; height: 100px;" alt="">
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="col-12 d-flex justify-content-center">
+                        <img class="selected-image img-fluid" src="/uploads/<%= productToDisplay.images[0] %>"
+                            style="width: auto; height: 450px;" alt="">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-5 py-5 my-5">
+            <!-- <table class="table table-borderless"> -->
+            <p class="fw-bold fs-3"><%= productToDisplay.name%></p>
+
+            <p class="text-secondary small"><%= productToDisplay.description%></p>
+
+            <p class="text-secondary ">Tags: <%= productToDisplay.tags%></p>
+
+            <p class="text-secondary ">Category: <%= productToDisplay.category.name%></p>
+
+            <p class="text-secondary ">Brand: <%= productToDisplay.brand.name%></p>
+
+            <p class="text-secondary">Price: <span class="fw-bold text-dark">₹<%= productToDisplay.price%></span></p>
+
+            <p class="text-secondary">Discount Price: <span class="fw-bold text-danger">₹<%= productToDisplay.discount%></span></p>
+
+            <!-- <p class="text-secondary">Offer Price: <span class="fw-bold text-success">₹</span></p> -->
+
+            <p class="text-secondary "> Stock: <%= productToDisplay.stock%></p>
+
+            <p class="text-secondary "> Status: 
+                <% if (productToDisplay.stock > 0 ) { %>
+                    <span class="text-success fw-bold">
+                        <%= productToDisplay.status %>
+                    </span>
+
+                <% } else { %>
+                    <span class="text-danger fw-bold">
+                        <%= productToDisplay.status %>
+                    </span>
+                <% } %>
+            </p>
+
+            <p class="text-secondary ">Display:
+                <% if (productToDisplay.display==='Active' ) { %>
+                    <span class="text-success fw-bold">
+                        <%= productToDisplay.display %>
+                    </span>
+
+                <% } else if (productToDisplay.display==='Blocked' ) { %>
+                    <span class="text-danger fw-bold">
+                        <%= productToDisplay.display %>
+                    </span>
+                <% } %>
+            </p>
+
+            <div>
+                <a href="/editProduct/<%= productToDisplay._id %>" class="btn btn-outline-success me-3">Edit</a>
+                <a href="/deleteProduct/<%= productToDisplay._id %>" class="btn btn-outline-danger mx-4" onclick="return confirm('Are you sure to delete the Product')">Delete</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

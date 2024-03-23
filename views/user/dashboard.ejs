@@ -1,0 +1,191 @@
+<%- include('../partials/signedin_header') %>
+
+
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+        </ol>
+    </nav>
+    <!-- end of breadcrumb -->
+
+
+    <!-- Your signup form and other content -->
+
+
+    <div class="container-fluid py-3">
+
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100 img-fluid" style="height: 450px;"
+                        src="https://www.vedantcomputers.com/image/cache/catalog/vc/slider/1320x600-Intel-14-min-1320x600.jpg"
+                        alt="First slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100 img-fluid" style="height: 450px;"
+                        src="https://www.vedantcomputers.com/image/cache/catalog/vc/slider/1320x600-MSI-Paytm-min-1320x600.jpg"
+                        alt="Second slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100 img-fluid" style="height: 450px;"
+                        src="https://www.vedantcomputers.com/image/cache/catalog/vc/slider/1320x600-Alalwake2-min-1320x600.jpg"
+                        alt="Third slide">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- BRANDS -->
+    <div class="brands">
+        <h3 class="text-center">Browse Popular Brands</h3>
+        <a href="/filters"><button>Filter</button></a>
+        <hr>
+
+        <!-- BRAND CAROUSEL -->
+
+        <% if (products.length>0) { %>
+            <div class="row">
+
+                <% products.forEach(x=> { %>
+
+                    <% if (x.stock>0 && x.display==="Active" && x.brand.status==="Active" &&
+                        x.category.status==="Active") { %>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12 my-3">
+                            <div class="p-3 text-center rounded" style="box-shadow: 0 0 4px rgba(0, 0, 0, 0.508);">
+                                <a href="/userProductDetails/<%= x._id %>" style="text-decoration: none; color: unset;">
+                                    <div style="position: relative;">
+                                        <img src="/uploads/<%= x.images[0] %>" class="img-fluid" alt="No preview"
+                                            style="height: 200px;">
+                                        <div class="d-flex justify-content-between">
+                                            <p class="font-weight-bold text-left"
+                                                style="white-space: nowrap; width: 70%; overflow: hidden; text-overflow: ellipsis;">
+                                                <%= x.name %>
+                                            </p>
+                                            <div class="d-flex">
+                                                <p class="font-weight-bold small text-danger"><del>₹<%= x.price %>
+                                                    </del></p>
+                                                <p class="font-weight-bold text-success">₹<%= x.price-x.discount %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% if ( x.offerprice ) { %>
+                                    <div style="position: absolute; top: 10px; right: 20px;" class="rounded-pill px-2 py-1 alert-success text-success fw-bold small">
+                                        Now @ ₹<%= x.offerprice %>
+                                    </div>
+                                    <%}%>
+                                </a>
+                                <div class="d-flex justify-content-between align-Items-center p-0">
+                                    <button class="btn btn-outline-dark" onclick="addToCart('<%= x._id %>')">Add to
+                                        Cart</button>
+                                    <a href="/wishlist/<%= x._id %>" class="btn fs-3 text-danger">&hearts;</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <% } %>
+
+
+                            <% }) %>
+
+
+
+            </div>
+            <% } %>
+    </div>
+
+    <% if (products.length> 0) { %>
+        <div class="d-flex justify-content-between m-auto w-50 align-items-center mt-3">
+            <p>Showing <%= (currentPage - 1) * perPage + 1 %>-
+                    <% if(currentPage===totalPages){%>
+                        <%=totalCount%>
+                            <%}else{%>
+                                <%= currentPage * perPage %>
+                                    <%}%>
+                                        results from <%= totalCount %>
+            </p>
+            <ul class="pagination">
+                <% for (let i=1; i <=totalPages; i++) { %>
+                    <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>">
+                            <%= i %>
+                        </a>
+                    </li>
+                    <% } %>
+            </ul>
+        </div>
+        <% } %>
+
+            <script>
+                function addToCart(productId) {
+                    $.ajax({
+                        url: `/addtoCart/${productId}`,
+                        method: 'get',
+                        success: function (Response) {
+                            if (Response.success) {
+                                Swal.fire({
+                                    position: "top",
+                                    icon: "success",
+                                    title: "Item added to cart",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                // alert('item added to cart......!!!');
+                            }
+                            else {
+                                Swal.fire({
+                                    position: "top",
+                                    icon: "error",
+                                    title: "stock not available at the moment",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                // alert("stock not available at the moment ")
+                            }
+                        }
+                    })
+                }
+            </script>
+            <% if (messages && messages.error) { %>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Display success message
+                        Swal.fire({
+                            icon: 'error',
+                            title: '<%= messages.error %>',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    })
+                </script>
+                <% } %>
+            <% if (messages && messages.success) { %>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Display success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: '<%= messages.success %>',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    });
+                </script>
+                <% } %>
+            <%- include('../partials/footer') %>

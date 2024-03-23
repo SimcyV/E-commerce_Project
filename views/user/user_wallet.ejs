@@ -1,0 +1,149 @@
+<%- include('../partials/signedin_header') %>
+
+
+
+<% if (messages.success) { %>
+    <div class="alert alert-success">
+        <%= messages.success %>
+    </div>
+    <% }else if (messages.error){ %>
+        <div class="alert alert-danger">
+            <%= messages.error %>
+        </div>
+        <%}%>
+
+            <!-- .............................. -->
+            <div class="container-fluid p-2" >
+                <div class="row m-0" style="min-height: 65vh;">
+                    <div class="col-10 m-auto bg-white rounded shadow-sm p-3">
+                        <h3 class="fw-bold text-center">Wallet</h3>
+                        <hr>
+                        <div class="p-3 shadow-sm">
+                            <% if (newWallet.length>0) { %>
+
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>Sl No</th>
+                                        <th>Transaction ID</th>
+                                        <th class="text-center">Date</th>
+                                        <th class="text-right">Credit/Debit</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+
+
+                                    <% newWallet.forEach((x,index)=> { %>
+                                        <tr>
+                                            <th>
+                                                <%=index+1 %>
+                                            </th>
+                                            <th>
+                                                <p>
+                                                    <%=x.orders._id%>
+                                                </p>
+                                            </th>
+                                            <% if (x.status==="Credit" ) { %>
+                                                <th class="text-center">
+                                                    <p>
+                                                        <%=new Date(x.orders.returnDate).toLocaleString('en-US', {
+                                                            timeZone: 'Asia/Kolkata' })%>
+                                                    </p>
+                                                </th>
+                                                <% }else{ %>
+                                                    <th class="text-center">
+                                                        <p>
+                                                            <%=new Date(x.orders.orderDate).toLocaleString('en-US',
+                                                                { timeZone: 'Asia/Kolkata' })%>
+                                                        </p>
+                                                    </th>
+                                                    <%}%>
+                                                        <% if (x.status==="Credit" ) { %>
+                                                            <th class="text-right text-success">
+                                                                <p>
+                                                                    <%=x.status%>
+                                                                </p>
+                                                            </th>
+                                                            <% }else{ %>
+                                                                <th class="text-right text-danger">
+                                                                    <p>
+                                                                        <%=x.status%>
+                                                                    </p>
+                                                                </th>
+                                                                <%}%>
+                                                                    <% if (x.status==="Credit" ) { %>
+                                                                        <th class="text-right text-success">
+                                                                            <p>
+                                                                                <%=x.totalAmount%>
+                                                                            </p>
+                                                                        </th>
+                                                                        <% } else { %>
+                                                                            <th class="text-right text-danger">
+                                                                                <p>
+                                                                                    <%=x.totalAmount%>
+                                                                                </p>
+                                                                            </th>
+                                                                            <%}%>
+
+                                        </tr>
+
+                                        <% }) %>
+                                        
+
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <td class="text-left fw-bold fs-6">Referral Bonus</td>
+                                                <td class="text-right fw-bold fs-5 text-success">
+                                                    <%=walletamounts.referedAmount%>
+                                                </td>
+                                            </tr>
+
+
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <td class="text-right fw-bold fs-3">Total Balance</td>
+                                                <td class="text-right fw-bold fs-3 text-success">
+                                                    <%=walletTotal%>
+                                                </td>
+                                            </tr>
+                                </table>
+
+                                <% }else if(walletamounts.referedAmount>0) { %>
+
+                                    <table class="table table-striped">
+                                    
+
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td class="text-left fw-bold fs-6">Referral Bonus</td>
+                                        <td class="text-right fw-bold fs-5 text-success">
+                                            <%=walletamounts.referedAmount%>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td class="text-right fw-bold fs-3">Total Balance</td>
+                                        <td class="text-right fw-bold fs-3 text-success">
+                                            <%=walletTotal%>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                    
+                                    <%} else {%>
+
+                                        <h3 class="alert alert-danger w-50 m-auto my-5 text-center">No wallet
+                                            information found</h3>
+                                        <%}%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+<%- include('../partials/footer') %>
