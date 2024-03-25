@@ -79,19 +79,19 @@
                     </div>
                     <div class="form-group py-2">
                         <label for="img1" class="py-1">Image 1</label>
-                        <input type="file" placeholder="image 1" class="form-control" name="image1" required>
+                        <input type="file" placeholder="image 1" class="form-control" name="image1" required onchange="validateImage(this)">
                     </div>
                     <div class="form-group py-2">
                         <label for="img2" class="py-1">image 2</label>
-                        <input type="file" placeholder="image 2" class="form-control" name="image2" required>
+                        <input type="file" placeholder="image 2" class="form-control" name="image2" required onchange="validateImage(this)">
                     </div>
                     <div class="form-group py-2">
                         <label for="img3" class="py-1">image 3</label>
-                        <input type="file" placeholder="image 3" class="form-control" name="image3" required>
+                        <input type="file" placeholder="image 3" class="form-control" name="image3" required onchange="validateImage(this)">
                     </div>
                     <div class="form-group py-2">
                         <label for="img4" class="py-1">image 4</label>
-                        <input type="file" placeholder="image 4" class="form-control" name="image4" required>
+                        <input type="file" placeholder="image 4" class="form-control" name="image4" required onchange="validateImage(this)">
                     </div>
                     <div class="d-flex justify-content-end py-3">
                         <a href="/product" type="submit" value="Exit" class="btn btn-outline-danger">Exit</a>
@@ -102,5 +102,22 @@
         </div>
     </div>
 </div> 
+<script>
+    function validateImage(fileInput) {
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.avif|\.webp)$/i;
+        const files = fileInput.files;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (!allowedExtensions.test(file.name)) {
+                alert('Please select only image files with extensions .jpg, .jpeg, .png, .gif');
+                fileInput.value = ''; // Clear the file input
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+
 
 <%- include('../partials/footer') %>
