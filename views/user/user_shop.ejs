@@ -36,7 +36,7 @@
                     <div class="collapse ps-5" id="category-collapse">
                         <% newcategory.forEach((x) => { %>
                             <div class="form-row">
-                                <input type="radio" name="category" id="category_<%= x._id %>" value="<%= x._id %>">
+                                <input <% if (activeCat && activeCat==x._id) { %> checked <% } %> type="radio" name="category" id="category_<%= x._id %>" value="<%= x._id %>">
                                 <label for="category_<%= x._id %>" class="my-0 mx-1"><%= x.name %></label>
                             </div>
                         <% }) %>
@@ -49,7 +49,7 @@
                     <div class="collapse ps-5" id="brand-collapse">
                         <% newbrand.forEach((x)=> { %>
                             <div class="form-row">
-                                <input type="radio" name="brand" id="brand_<%= x._id %>" value="<%= x._id %>">
+                                <input <% if (activeBrand && activeBrand==x._id) { %> checked <% } %> type="radio" name="brand" id="brand_<%= x._id %>" value="<%= x._id %>">
                                 <label for="brand_<%= x._id %>" class="my-0 mx-1"><%= x.name %></label>
                             </div>
                         <% }) %>

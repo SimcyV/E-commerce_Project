@@ -496,11 +496,13 @@ module.exports = {
 
     getFilter: async (req, res) => {
         try {
+            let activeCat=""
+            let activeBrand=""
             req.session.filterdata = null;
             const displayProduct = await product.find({}).sort({ name: 1 })
             const newbrand = await brand.find({})
             const newcategory = await category.find({})
-            res.render("./user/user_shop", { displayProduct, newbrand, newcategory })
+            res.render("./user/user_shop", { displayProduct, newbrand, newcategory,activeBrand,activeCat })
         } catch (error) {
 
         }
@@ -509,9 +511,22 @@ module.exports = {
     postGetFilter: async (req, res) => {
 
         try {
+
+        
+
+
             const displayProduct = await product.find({});
             const newbrand = await brand.find({});
             const newcategory = await category.find({});
+            let activeCat=""
+            let activeBrand=""
+
+            if(req.body.category){
+                activeCat=req.body.category
+            }
+            if(req.body.brand){
+                activeBrand=req.body.brand
+            }
 
             let filterCriteria = {};
 
@@ -528,7 +543,7 @@ module.exports = {
 
             const filteredProducts = await product.find(filterCriteria).sort({ name: 1 });
             req.session.filterdata = filterCriteria
-            res.render("./user/user_shop", { displayProduct: filteredProducts, newbrand, newcategory });
+            res.render("./user/user_shop", { displayProduct: filteredProducts, newbrand, newcategory, activeCat, activeBrand });
         } catch (error) {
             console.error(error);
 
