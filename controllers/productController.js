@@ -59,49 +59,6 @@ module.exports = {
         }
     },
 
-    // postProduct: async (req, res) => {
-    //     try {
-    //         const images = []
-    //         const newCategory = await category.findOne({ name: req.body.category })
-    //         const newBrand = await brand.findOne({ name: req.body.brand })
-    //         for (let i = 1; i <= 4; i++) {
-    //             const fieldName = `image${i}`;
-    //             if (req.files[fieldName] && req.files[fieldName][0]) {
-    //                 images.push(req.files[fieldName][0].filename);
-    //             }
-    //         }
-    //         let status
-    //         if (req.body.stock <= 0) {
-    //             status = "Out of Stock";
-    //         } else {
-    //             status = "In Stock";
-    //         }
-    //         if (Number(req.body.discount) >= Number(req.body.price)) {
-    //             req.flash("error1", "Discount price must be less than product price")
-    //             res.redirect("/addProduct");
-    //         }
-
-    //         const newProduct = new product({
-    //             name: req.body.name,
-    //             price: req.body.price,
-    //             discount: req.body.discount,
-    //             description: req.body.description,
-    //             brand: newBrand._id,
-    //             tags: req.body.tags, stock: req.body.stock,
-    //             category: newCategory._id,
-    //             status: status,
-    //             display: "Active",
-    //             updatedOn: moment(new Date()).format("llll"),
-    //             images: images,
-    //         });
-    //         await newProduct.save()
-    //         req.flash("success", "Product is added successfully")
-    //         res.redirect("/product")
-    //     } catch (error) {
-
-    //     }
-    // },
-
     postProduct: async (req, res) => {
         try {
             const images = [];
