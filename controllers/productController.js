@@ -65,28 +65,20 @@ module.exports = {
             const newCategory = await category.findOne({ name: req.body.category });
             const newBrand = await brand.findOne({ name: req.body.brand });
         
-            // Loop through each image field to process
-            for (let i = 1; i <= 4; i++) {
-                const fieldName = `image${i}`;
-                if (req.files[fieldName] && req.files[fieldName][0]) {
-                    const file = req.files[fieldName][0];
-                    
-    
-                    try {
-                        // Use sharp to crop image before saving
-                        const croppedImageBuffer = await sharp(file.path) // Use file path instead of buffer
-                            .resize({ width: 200, height: 200, fit: 'cover' })
-                            .toBuffer();
-                        const filename = `${fieldName}-${Date.now()}.jpg`;
-                        images.push(filename);
-                        // Save cropped image
-                        await sharp(croppedImageBuffer).toFile(path.join(__dirname, '..', 'public', 'uploads', filename)); // Use path.join to construct the file path
-                    } catch (sharpError) {
-                        console.error('Sharp error:', sharpError);
-                        continue;
-                    }
+            for (let file of req.files) {
+                try {
+                    const croppedImageBuffer = await sharp(file.path) 
+                        .resize({ width: 200, height: 200, fit: 'cover' })
+                        .toBuffer();
+                    const filename = `${file.fieldname}-${Date.now()}.jpg`; 
+                    images.push(filename);
+                    await sharp(croppedImageBuffer).toFile(path.join(__dirname, '..', 'public', 'uploads', filename));
+                } catch (sharpError) {
+                    console.error('Sharp error:', sharpError);
+                    continue;
                 }
             }
+            console.log("Multi images-------------------->",images);
             let status
                     if (req.body.stock <= 0) {
                         status = "Out of Stock";
@@ -148,7 +140,7 @@ module.exports = {
             const { id } = req.params
             // console.log(id);
             let images = []
-            for (let i = 0; i <= 3; i++) {
+            for (let i = 0; i <= 10; i++) {
                 const fieldName = `image${i + 1}`;
                 if (req.files[fieldName] && req.files[fieldName][0]) {
                     images[i] = req.files[fieldName][0].filename;

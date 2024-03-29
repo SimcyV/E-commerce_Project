@@ -1,5 +1,12 @@
 <%- include('../partials/admin_headerTwo') %>
 
+<style>
+    .image-preview{
+        height: 100px;
+        width: auto;
+        margin: 10px;
+    }
+</style>
 
 <div class="container-fluid">
     <div class="row d-flex justify-content-center">
@@ -77,32 +84,11 @@
                         <input type="number" placeholder="Product Stock" class="form-control" id="stocks" name="stock" required min="0" oninput="validateInput2(stocks)">
                         <div id="validationMessage3" class="text-danger"></div>
                     </div>
-                    <div class="form-group py-2">
-                        <label for="img1" class="py-1">Image 1</label>
-                        <input type="file" placeholder="image 1" class="form-control" name="image1" required onchange="validateImageAndPreview(this, 'preview1')">
-                        <img id="preview1" src="#" alt="Preview Image" style="display: none; max-width: 100px; max-height: 100px;">
-                        <button type="button" onclick="deleteImage('image1', 'preview1')">Delete</button>
+                    <div id="imageFields">
                     </div>
-                   
-                    <div class="form-group py-2">
-                        <label for="img2" class="py-1">Image 2</label>
-                        <input type="file" placeholder="image 2" class="form-control" name="image2" required onchange="validateImageAndPreview(this, 'preview2')">
-                        <img id="preview2" src="#" alt="Preview Image" style="display: none; max-width: 100px; max-height: 100px;">
-                        <button type="button" onclick="deleteImage('image2', 'preview2')">Delete</button>
-                    </div>
-                    
-                    <div class="form-group py-2">
-                        <label for="img3" class="py-1">Image 3</label>
-                        <input type="file" placeholder="image 3" class="form-control" name="image3" required onchange="validateImageAndPreview(this, 'preview3')">
-                        <img id="preview3" src="#" alt="Preview Image" style="display: none; max-width: 100px; max-height: 100px;">
-                        <button type="button" onclick="deleteImage('image3', 'preview3')">Delete</button>
-                    </div>
-                    
-                    <div class="form-group py-2">
-                        <label for="img4" class="py-1">Image 4</label>
-                        <input type="file" placeholder="image 4" class="form-control" name="image4" required onchange="validateImageAndPreview(this, 'preview4')">
-                        <img id="preview4" src="#" alt="Preview Image" style="display: none; max-width: 100px; max-height: 100px;">
-                        <button type="button" onclick="deleteImage('image4', 'preview4')">Delete</button>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="button" id="addImageField" class="btn btn-secondary">+</button>
                     </div>
                     
                     <div class="d-flex justify-content-end py-3">
@@ -114,40 +100,78 @@
         </div>
     </div>
 </div> 
+
 <script>
-  function validateImageAndPreview(fileInput, previewId) {
-    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.avif|\.webp)$/i;
-    const files = fileInput.files;
-    const preview = document.getElementById(previewId);
+    document.getElementById('addImageField').addEventListener('click', () => {
+        var imageFields = document.getElementById("imageFields");
+        var imageField = document.createElement('div')
+        imageField.classList.add('image-field')
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (!allowedExtensions.test(file.name)) {
-            alert('Please select only image files with extensions .jpg, .jpeg, .png, .gif');
-            fileInput.value = ''; // Clear the file input
-            preview.style.display = 'none'; // Hide preview
-            return false;
+        var input = document.createElement('input')
+        input.type = 'file';
+        input.name = 'image';
+        input.accept = 'image/*';
+        input.required = true;
+        input.classList.add('form-control')
+        input.addEventListener('change', ()=>{
+            var file = event.target.files[0]
+            var reader = new FileReader()
+            reader.onload = (e) => {
+                var preview = document.createElement('img')
+                preview.classList.add('image-preview')
+                preview.classList.add('img-fluid')
+                preview.src = e.target.result
+                imageField.appendChild(preview)
+            }
+            reader.readAsDataURL(file)
+        })
+        var deleteButton = document.createElement("button")
+        deleteButton.textContent = "X"
+        deleteButton.type = "button"
+        deleteButton.classList.add('delete-image')
+        deleteButton.classList.add('btn-danger')
+        deleteButton.classList.add('btn')
+        deleteButton.addEventListener('click', () => {
+            imageFields.removeChild(imageField)
+        })
+        imageField.appendChild(input)
+        imageField.appendChild(deleteButton)
+        imageFields.appendChild(imageField)
+    })
+
+    // Function to validate image and show preview
+    function validateImageAndPreview(input, previewId) {
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.avif|\.webp)$/i;
+        const files = input.files;
+        const preview = document.getElementById(previewId);
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (!allowedExtensions.test(file.name)) {
+                alert('Please select only image files with extensions .jpg, .jpeg, .png, .gif');
+                input.value = ''; // Clear the file input
+                preview.style.display = 'none'; // Hide preview
+                return false;
+            }
+
+            // Show image preview
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block'; // Show preview
+            };
+            reader.readAsDataURL(file);
         }
-
-        // Show image preview
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block'; // Show preview
-        };
-        reader.readAsDataURL(file);
     }
-}
 
-function deleteImage(inputId, previewId) {
-    const fileInput = document.getElementsByName(inputId)[0];
-    const preview = document.getElementById(previewId);
-    fileInput.value = ''; // Clear file input
-    preview.src = ''; // Clear preview
-    preview.style.display = 'none'; // Hide preview
-}
-
+    // Function to delete image
+    function deleteImage(inputId, previewId) {
+        const fileInput = document.getElementsByName(inputId)[0];
+        const preview = document.getElementById(previewId);
+        fileInput.value = ''; // Clear file input
+        preview.src = ''; // Clear preview
+        preview.style.display = 'none'; // Hide preview
+    }
 </script>
-
 
 <%- include('../partials/footer') %>

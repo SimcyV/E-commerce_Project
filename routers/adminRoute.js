@@ -9,7 +9,8 @@ const multer = require("../middlewares/multer");
 const orderController = require("../controllers/orderController");
 const adminDashboardController = require("../controllers/adminDashboardController")
 const couponController=require("../controllers/couponController")
-const offerController=require("../controllers/offerController")
+const offerController=require("../controllers/offerController");
+const uploadMulter = require("../middlewares/multer");
 
 
 
@@ -93,8 +94,7 @@ router.route("/blockProduct/:id")
 // add product
 router.route("/addProduct")
     .get(productController.getAddProduct)
-    .post(multer.fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }, { name: 'image3', maxCount: 1 },
-    { name: 'image4', maxCount: 1 }]), productController.postProduct)
+    .post(uploadMulter.any(), productController.postProduct)
 
 // product details
 router.route("/productDetails/:id")
