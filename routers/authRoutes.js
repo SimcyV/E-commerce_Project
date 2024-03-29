@@ -5,7 +5,7 @@ const user = require('../models/user_schema')
 
 const CLIENT_ID = '66294555605-h51ju12anina4batcsaegcm7logslvqk.apps.googleusercontent.com';
 const CLIENT_SECRET = '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';
-const REDIRECT_URI = 'http://localhost:3000/auth/google/callback';
+const REDIRECT_URI = 'https://trainerscricketzone.shop/auth/google/callback';
 
 // Initiates the Google Login flow
 router.get('/auth/google', (req, res) => {
